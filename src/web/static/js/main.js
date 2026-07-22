@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSavePreset = document.getElementById('btn-save-preset');
 
     let savedPresets = [];
-    let detectedCharacters = ['真步', '埃拉', '水堇'];
+    let triggerCharacters = ['埃拉', '真步', '水堇'];
 
     // 1. 探測 BS4 模擬器實例
     async function scanDevices() {
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 渲染多開模擬器卡片 (純淨選軸版)
+    // 渲染多開模擬器卡片
     function renderInstanceMatrix(devices) {
         instanceMatrix.innerHTML = '';
         let connectedCount = 0;
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         deviceCountBadge.textContent = `在線: ${connectedCount} / 共 ${devices.length} 台`;
     }
 
-    // 2. 即時 Parse 軸並渲染【左側站位校正區 (支援留空)】
+    // 2. 即時 Parse 軸並渲染【左側站位校正區】
     async function parseTimeline() {
         const text = timelineTextInput.value;
         if (!text.trim()) return;
@@ -94,8 +94,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
 
             if (data.success) {
-                if (data.detected_characters && data.detected_characters.length > 0) {
-                    detectedCharacters = data.detected_characters;
+                // 只提取真正的 UB 觸發動作角色
+                if (data.steps && data.steps.length > 0) {
+                    const triggers = new Set();
+                    data.steps.forEach(s => {
+                        if (s.trigger_character && s.trigger_character !== '全隊') {
+                            triggers.add(s.trigger_character);
+                        }
+                    });
+                    if (triggers.size > 0) {
+                        triggerCharacters = Array.from(triggers);
+                    }
                 }
                 renderPartyMappingGrid();
                 renderTimelineVisual(data.steps);
@@ -108,18 +117,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 渲染左側手動校正 P1 ~ P5 站位區 (第一個選項可留空 -- 未設定 --)
+    // 渲染左側手動校正 P1 ~ P5 站位區
     function renderPartyMappingGrid() {
         editorPartyGrid.innerHTML = '';
         for (let pIdx = 0; pIdx < 5; pIdx++) {
-            // 允許留空：選項包含 '-- 未設定 --'
-            let optionsHtml = '<option value="">-- 未設定 --</option>';
-            
-            // 預設智推對應：只有當索引有明確角色才選擇，否則保持未設定
-            const autoMatchedChar = detectedCharacters[pIdx] || '';
+            // 預設一律選中 '-- 未設定 --'
+            let optionsHtml = '<option value="" selected>-- 未設定 --</option>';
 
-            optionsHtml += detectedCharacters.map(c => `
-                <option value="${c}" ${c === autoMatchedChar ? 'selected' : ''}>${c}</option>
+            optionsHtml += triggerCharacters.map(c => `
+                <option value="${c}">${c}</option>
             `).join('');
 
             const slotEl = document.createElement('div');
