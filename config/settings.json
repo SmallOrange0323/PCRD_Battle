@@ -1,0 +1,28 @@
+{
+  "adb": {
+    "adb_path": "C:\\Users\\m8203\\Downloads\\scrcpy-win64-v3.3.4\\scrcpy-win64-v3.3.4\\adb.exe",
+    "default_host": "127.0.0.1",
+    "default_port": 5555,
+    "timeout_seconds": 5
+  },
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "ui_coordinates": {
+    "menu_button": [1800, 60],
+    "auto_button": [1837, 892],
+    "set_all_button": [1837, 720],
+    "speed_button": [1837, 1050],
+    "set_buttons": [
+      [540, 840],
+      [765, 840],
+      [990, 840],
+      [1215, 840],
+      [1440, 840]
+    ]
+  },
+  "roi_boxes": {
+    "timer": [1575, 30, 1755, 75]
+  }
+}

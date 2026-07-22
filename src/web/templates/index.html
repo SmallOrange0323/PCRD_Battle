@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCRD Battle Control Hub - 公主連結多開自動出刀控制台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 頂部導覽 Header -->
+        <header class="navbar">
+            <div class="brand">
+                <div class="brand-icon">🌸</div>
+                <div class="brand-text">
+                    <h1>PCRD Battle Control Hub</h1>
+                    <span>公主連結 BS4 多實例獨立出刀與事故診斷控制台</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="btn-scan-adb">
+                    <span class="icon">🔄</span> 廣域探測 BS4 實例
+                </button>
+                <button class="btn btn-pcrd-pink" id="btn-start-all-tasks">
+                    🚀 全部 12 多開一鍵啟動
+                </button>
+            </div>
+        </header>
+
+        <!-- 上半部：12 多開獨立工作站矩陣 (純淨選軸版) -->
+        <section class="instance-section">
+            <div class="section-title-row">
+                <h2>🖥️ BS4 模擬器 12 多開獨立工作站 (Multi-Instance Matrix)</h2>
+                <span class="badge" id="device-count-badge">探測中...</span>
+            </div>
+            <div class="instance-matrix" id="instance-matrix">
+                <!-- 動態填入 BS4 模擬器卡片 -->
+            </div>
+        </section>
+
+        <!-- 下半部：SET 軸編輯、校正對照與儲存 -->
+        <div class="split-layout">
+            <!-- 左側：軸文本輸入、P1~P5 校正與儲存 -->
+            <section class="panel script-section">
+                <div class="section-title-row">
+                    <h2>📝 SET 軸文本解析與站位校正</h2>
+                    <button class="btn btn-pcrd-blue" id="btn-parse-timeline">
+                        ✨ 1. 即時解析 (Parse)
+                    </button>
+                </div>
+                
+                <textarea id="timeline-text-input" placeholder="請在此貼上 SET 軸文本，例如：&#10;第2隊，傷害43300萬&#10;6★真步 5★阿剌克涅 5★涅妃＝涅羅 5★埃拉 5★水堇&#10;開場：開auto + set OOOOO&#10;112 埃拉 → XXOXO&#10;103 真步 → OXOOO">第2隊，傷害43300萬
+6★真步 5★阿剌克涅 5★涅妃＝涅羅 5★埃拉 5★水堇
+
+開場：開auto + set OOOOO
+112 埃拉 → XXOXO
+103 真步 → OXOOO
+055 真步 → XOOOO
+048 水堇 → OOXOX
+027 埃拉 → XOXXO
+022 埃拉 → OOOOX
+014 真步 → XOOOX
+008 埃拉 → XOOXO</textarea>
+
+                <!-- 2. 手動校正 P1 ~ P5 角色站位對照區 -->
+                <div class="party-mapping-box">
+                    <div style="font-size: 12px; font-weight: 700; color: var(--pcrd-pink); margin-bottom: 6px;">
+                        🎯 2. 手動校正 P1 ~ P5 角色站位關聯 (前排 ➔ 後排)
+                    </div>
+                    <div class="party-row-grid" id="editor-party-grid">
+                        <!-- 動態由 JS 填入 P1 ~ P5 下拉選單 -->
+                    </div>
+                </div>
+
+                <!-- 3. 儲存至軸檔預設庫 -->
+                <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px;">
+                    <input type="text" id="input-preset-name" class="form-select" placeholder="請輸入軸檔名稱 (例如: 2王_4.3億埃拉軸)" style="flex: 1;">
+                    <button class="btn btn-pcrd-pink" id="btn-save-preset">
+                        💾 3. 儲存軸檔
+                    </button>
+                </div>
+            </section>
+
+            <!-- 右側：視覺化時間軸卡片 -->
+            <section class="panel visualizer-section">
+                <div class="section-title-row">
+                    <h2>📊 視覺化 SET 動作時間軸</h2>
+                    <span class="badge" id="step-count-badge">0 個步驟</span>
+                </div>
+                <div class="timeline-visual-list" id="timeline-visual-list">
+                    <div class="empty-state">點擊「即時解析」產生視覺化時間軸</div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
