@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSavePreset = document.getElementById('btn-save-preset');
 
     let savedPresets = [];
-    let detectedCharacters = ['真步', '阿剌克涅', '涅妃', '埃拉', '水堇'];
+    let detectedCharacters = ['真步', '埃拉', '水堇'];
 
     // 1. 探測 BS4 模擬器實例
     async function scanDevices() {
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 渲染多開模擬器卡片 (純淨選擇軸檔版)
+    // 渲染多開模擬器卡片 (純淨選軸版)
     function renderInstanceMatrix(devices) {
         instanceMatrix.innerHTML = '';
         let connectedCount = 0;
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         deviceCountBadge.textContent = `在線: ${connectedCount} / 共 ${devices.length} 台`;
     }
 
-    // 2. 即時 Parse 軸並渲染【左側站位校正區】
+    // 2. 即時 Parse 軸並渲染【左側站位校正區 (支援留空)】
     async function parseTimeline() {
         const text = timelineTextInput.value;
         if (!text.trim()) return;
@@ -108,13 +108,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 渲染左側手動校正 P1 ~ P5 站位區
+    // 渲染左側手動校正 P1 ~ P5 站位區 (第一個選項可留空 -- 未設定 --)
     function renderPartyMappingGrid() {
         editorPartyGrid.innerHTML = '';
         for (let pIdx = 0; pIdx < 5; pIdx++) {
-            const defaultName = detectedCharacters[pIdx] || `角色${pIdx+1}`;
-            let optionsHtml = detectedCharacters.map(c => `
-                <option value="${c}" ${c === defaultName ? 'selected' : ''}>${c}</option>
+            // 允許留空：選項包含 '-- 未設定 --'
+            let optionsHtml = '<option value="">-- 未設定 --</option>';
+            
+            // 預設智推對應：只有當索引有明確角色才選擇，否則保持未設定
+            const autoMatchedChar = detectedCharacters[pIdx] || '';
+
+            optionsHtml += detectedCharacters.map(c => `
+                <option value="${c}" ${c === autoMatchedChar ? 'selected' : ''}>${c}</option>
             `).join('');
 
             const slotEl = document.createElement('div');
@@ -167,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             if (data.success) {
                 savedPresets = data.presets;
-                scanDevices(); // 重新渲染卡片選單
+                scanDevices();
             }
         } catch (err) {
             console.error(err);

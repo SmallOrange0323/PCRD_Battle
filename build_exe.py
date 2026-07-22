@@ -3,7 +3,7 @@ import sys
 import os
 
 def build():
-    print("正開始打包 PCRD Battle Hub 5-Step SOP 版 v4 (.exe)...")
+    print("正開始打包 PCRD Battle Hub 允許留空版 v5 (.exe)...")
     
     try:
         import PyInstaller
@@ -16,7 +16,7 @@ def build():
         "--noconfirm",
         "--onedir",
         "--windowed",
-        "--name=PCRD_Battle_Hub_v4",
+        "--name=PCRD_Battle_Hub_v5",
         "--add-data=src/web/templates;src/web/templates",
         "--add-data=src/web/static;src/web/static",
         "--add-data=config;config",
@@ -25,7 +25,7 @@ def build():
 
     print(f"執行指令: {' '.join(cmd)}")
     subprocess.run(cmd, check=True)
-    print("\n[OK] 打包完成！獨立 App 可執行檔位於 dist/PCRD_Battle_Hub_v4/PCRD_Battle_Hub_v4.exe")
+    print("\n[OK] 打包完成！獨立 App 可執行檔位於 dist/PCRD_Battle_Hub_v5/PCRD_Battle_Hub_v5.exe")
 
 if __name__ == '__main__':
     build()
